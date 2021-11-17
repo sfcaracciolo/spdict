@@ -1,0 +1,8 @@
+/lib
+/lib64
+__pycache__
+/bin
+/build
+*.egg-info
+pyvenv.cfg
+/include
