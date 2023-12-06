@@ -1,7 +1,6 @@
 import pywt
 import numpy as np
 import scipy as sp
-from scipy import sparse
 
 def create_sparse_dict_from_atoms(atoms: list, n: int, steps: int = 1) -> sp.sparse.csc_matrix:
     """ 
@@ -45,7 +44,7 @@ def sparse_convolution_matrix(a: np.ndarray, n: int, step: int = 1, normalize: b
     data = np.broadcast_to(a[:,np.newaxis], shape=(m, n))
     offsets = np.arange(start=0, stop=-m, step=-1)
 
-    D = sp.sparse.dia_matrix((data, offsets), shape=(k, n), dtype=np.float32)
+    D = sp.sparse.dia_matrix((data, offsets), shape=(k, n))
 
     return D.tocsc(copy=False)[:,::step]
 
@@ -67,7 +66,7 @@ def get_wp_atoms(wname: str = 'db4', max_level: int = 1) -> list:
 
 def get_cwt_atoms(wname: str = 'morl', max_level: int = 1) -> list:
     atoms = []
-    wobj = pywt.ContinuousWavelet(wname, dtype=np.float32)
+    wobj = pywt.ContinuousWavelet(wname)
     for level in range(max_level, 0, -1):
         atoms.append(get_continuous_wavelet(wobj, level))
     return atoms
@@ -77,14 +76,14 @@ def get_discrete_scale(w: pywt.Wavelet, level: int):
         scale, _, _ = w.wavefun(level)
     else:
         _, _, scale, _, _ = w.wavefun(level)
-    return scale.astype(np.float32)
+    return scale
 
 def get_discrete_wavelet(w: pywt.Wavelet, level: int):
     if w.orthogonal:
         _, wavelet, _ = w.wavefun(level)
     else:
         _, _, _, wavelet, _ = w.wavefun(level)
-    return wavelet.astype(np.float32)
+    return wavelet
 
 def get_continuous_wavelet(w: pywt.ContinuousWavelet, level: int):
     wavelet, _ = w.wavefun(level)

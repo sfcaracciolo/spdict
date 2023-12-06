@@ -6,3 +6,6 @@ __pycache__
 *.egg-info
 pyvenv.cfg
 /include
+pyproject.toml
+Scripts/
+.python-version
