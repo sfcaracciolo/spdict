@@ -2,7 +2,7 @@ import pywt
 import numpy as np
 import scipy as sp
 
-def create_sparse_dict_from_atoms(atoms: list, n: int, steps: int = 1) -> sp.sparse.csc_matrix:
+def create_sparse_dict_from_atoms(atoms: list, n: int, steps: int = 1, **kwargs) -> sp.sparse.csc_matrix:
     """ 
         atoms: list of np.ndarray
         n: amount of samples
@@ -15,14 +15,14 @@ def create_sparse_dict_from_atoms(atoms: list, n: int, steps: int = 1) -> sp.spa
     if isinstance(steps, int):
         steps = len(atoms)*[steps]
 
-    if len(steps) != len(steps):
-        raise ValueError(f'The size of steps and atoms should be equal.')
+    if len(steps) != len(atoms):
+        raise ValueError(f'The amount of steps and atoms should be equal.')
 
 
     blocks = []
     for atom, step in zip(atoms, steps):
         cols = n + 1 - atom.size
-        blocks.append(sparse_convolution_matrix(atom, cols, step=step))
+        blocks.append(sparse_convolution_matrix(atom, cols, step=step, **kwargs))
 
     return sp.sparse.hstack(blocks, format='csc')
 

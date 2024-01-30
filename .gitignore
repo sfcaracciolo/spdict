@@ -9,3 +9,5 @@ pyvenv.cfg
 pyproject.toml
 Scripts/
 .python-version
+share
+etc
